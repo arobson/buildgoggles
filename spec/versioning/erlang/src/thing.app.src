@@ -1,0 +1,9 @@
+{ application, thing, [
+		{ description, "this is just here for testing" },
+		{ vsn, "1.0.1" },
+		{ modules, [] },
+		{ applications, [ kernel, stdlib ] },
+		{ mod, { thing_app, [] } },
+		{ env, [] }
+	]
+}

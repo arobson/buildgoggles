@@ -1,0 +1,41 @@
+{
+  "name": "buildgoggles",
+  "version": "0.1.0",
+  "description": "A simple CLI for gathering key info around a git repo and writing it to a json file",
+  "main": "src/index.js",
+  "bin": {
+    "buildgoggles": "./bin/buildgoggles"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/arobson/buildgoggles.git"
+  },
+  "keywords": [
+    "build",
+    "git",
+    "info"
+  ],
+  "author": "Alex Robson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arobson/buildgoggles/issues"
+  },
+  "homepage": "https://github.com/arobson/buildgoggles#readme",
+  "dependencies": {
+    "globulesce": "^0.1.5",
+    "lodash": "^3.10.1",
+    "when": "^3.7.7"
+  },
+  "devDependencies": {
+    "biggulp": "^0.2.2",
+    "chai": "^3.4.1",
+    "chai-as-promised": "^5.2.0",
+    "gulp": "^3.9.0",
+    "sinon": "^1.17.2",
+    "sinon-as-promised": "^4.0.0",
+    "sinon-chai": "^2.8.0"
+  }
+}

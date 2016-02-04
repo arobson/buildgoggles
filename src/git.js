@@ -122,7 +122,22 @@ function getOwner( path ) {
 			},
 			function( err ) {
 				return "anonymous";
-			} );
+			} )
+		.then( function( owner ) {
+			if ( owner === "anonymous" ) {
+				var slug = process.env.DRONE_REPO_SLUG;
+				var repo = process.env.DRONE_REPO;
+				if ( slug ) {
+					return slug.split( "/" )[ 1 ];
+				} else if( repo ) {
+					return repo.split( "/" )[ 0 ];
+				} else {
+					return owner;
+				}
+			} else {
+				return owner;
+			}
+		} );
 }
 
 function getRepository( path ) {

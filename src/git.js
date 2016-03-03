@@ -14,7 +14,7 @@ function createInfo( path, branch, build, commit, owner, repo ) {
 		commit: commit,
 		owner: owner,
 		path: syspath.resolve( path ),
-		repository: repo,
+		repository: repo.replace( ".git", "" ),
 		slug: commit.slice( 0, 8 )
 	};
 }
@@ -129,7 +129,7 @@ function getOwner( path ) {
 				var repo = process.env.DRONE_REPO;
 				if ( slug ) {
 					return slug.split( "/" )[ 1 ];
-				} else if( repo ) {
+				} else if ( repo ) {
 					return repo.split( "/" )[ 0 ];
 				} else {
 					return owner;

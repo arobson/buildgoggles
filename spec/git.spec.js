@@ -22,6 +22,7 @@ describe( "Git", function() {
 			repoInfo.path.should.equal( repoPath );
 			repoInfo.build.should.equal( 5 );
 			repoInfo.commit.length.should.equal( 40 );
+			repoInfo.tag.should.equal( "anonymous_fauxgitaboudit_master_" + repoInfo.version + "_5_" + repoInfo.commit.slice( 0, 8 ) );
 		} );
 	} );
 

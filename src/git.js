@@ -15,6 +15,7 @@ function createInfo( path, branch, build, commit, owner, repo ) {
 		owner: owner,
 		path: syspath.resolve( path ),
 		repository: repo,
+		tag: [ owner, repo, branch, build.version, build.count, commit.slice( 0, 8 ) ].join( "_" ),
 		slug: commit.slice( 0, 8 )
 	};
 }
@@ -129,7 +130,7 @@ function getOwner( path ) {
 				var repo = process.env.DRONE_REPO;
 				if ( slug ) {
 					return slug.split( "/" )[ 1 ];
-				} else if( repo ) {
+				} else if ( repo ) {
 					return repo.split( "/" )[ 0 ];
 				} else {
 					return owner;

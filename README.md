@@ -37,6 +37,7 @@ __sample output__
 	"branch": "master",
 	"version": "0.1.0",
 	"build": 1,
-	"slug": "a1b2c3d4"
+	"slug": "a1b2c3d4",
+  "tag": "arobson_build-goggles_master_0.1.0_1_a1b2c3d4"
 }
 ```

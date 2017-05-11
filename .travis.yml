@@ -3,7 +3,10 @@ language: node_js
 os:
   - linux
 
+before_script:
+  - git config --global user.email "anonymous@anon.com"
+  - git config --global user.name "anonymous"
+
 node_js:
   - "4"
   - "6"
-  - "node"

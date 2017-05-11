@@ -99,8 +99,8 @@ Resulting json (abbreviated):
 ```
 
 [travis-url]: https://travis-ci.org/arobson/buildGoggles
-[travis-image]: https://img.shields.io/travis/arobson/buildGoggles/master.svg
-[coveralls-url]: https://coveralls.io/github/arobson/buildGoggles
-[coveralls-image]: https://img.shields.io/coveralls/arobson/buildGoggles.svg
+[travis-image]: https://travis-ci.org/arobson/buildgoggles.svg?branch=master
+[coveralls-url]: https://coveralls.io/github/arobson/buildgoggles?branch=master
+[coveralls-image]: https://coveralls.io/repos/github/arobson/buildgoggles/badge.svg?branch=master
 [npm-url]: https://www.npmjs.com/package/buildGoggles
 [npm-image]: https://img.shields.io/npm/v/buildGoggles.svg

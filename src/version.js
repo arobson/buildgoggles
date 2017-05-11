@@ -1,4 +1,3 @@
-var _ = require( "lodash" );
 var glob = require( "globulesce" );
 var path = require( "path" );
 var fs = require( "fs" );
@@ -48,7 +47,7 @@ function getVersionFile( projectPath ) {
 	var resolvedPath = path.resolve( projectPath );
 	return glob( resolvedPath, searchPaths )
 		.then( function( x ) {
-			if ( _.isEmpty( x ) ) {
+			if ( x === undefined || x === null || x === {} || x === [] ) {
 				return new Error( "None of the supported version specifiers could be found in " + resolvedPath );
 			} else {
 				return x[ 0 ];
@@ -60,7 +59,7 @@ function getVersionFile( projectPath ) {
 
 function getVersion( filePath, content ) {
 	if ( !content ) {
-		content = fs.readFileSync( filePath );
+		content = fs.readFileSync( filePath ).toString();
 	}
 	var ext = path.extname( filePath );
 	return parsers[ ext ]( content );

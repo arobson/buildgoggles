@@ -1,6 +1,6 @@
 {
   "name": "buildgoggles",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "A simple CLI for gathering key info around a git repo and writing it to a json file",
   "main": "src/index.js",
   "bin": {
@@ -26,8 +26,8 @@
   "homepage": "https://github.com/arobson/buildgoggles#readme",
   "dependencies": {
     "globulesce": "^0.1.5",
-    "lodash": "^3.10.1",
-    "when": "^3.7.7"
+    "when": "^3.7.7",
+    "yargs": "^8.0.1"
   },
   "devDependencies": {
     "biggulp": "^0.2.2",

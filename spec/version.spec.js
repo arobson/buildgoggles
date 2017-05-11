@@ -1,6 +1,7 @@
 require( "./setup" );
 var seq = require( "when/sequence" );
 var version = require( "../src/version.js" );
+
 describe( "Version", function() {
 	describe( "should find correct version file", function() {
 		var dotnetVersion, erlangVersion, nodeVersion;

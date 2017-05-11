@@ -6,7 +6,12 @@ var fs = require( "fs" );
 var syspath = require( "path" );
 var format = require( "util" ).format;
 
-function createInfo( path, branch, build, commit, owner, repo ) {
+function createInfo( path, branch, build, commit, owner, repo, format ) {
+	var verionParts = build.version ? build.version.split(".") : [ "0", "0", "0" ];
+	var major = verionParts[ 0 ];
+	var minor = verionParts.length > 1 ? verionParts[ 1 ] : "0";
+	var patch = verionParts.length > 2 ? verionParts[ 2 ] : "0";
+	var tag = getTags( branch, build, commit, owner, repo, major, minor, patch, format );
 	return {
 		branch: branch,
 		version: build.version,
@@ -15,9 +20,27 @@ function createInfo( path, branch, build, commit, owner, repo ) {
 		owner: owner,
 		path: syspath.resolve( path ),
 		repository: repo,
-		tag: [ owner, repo, branch, build.version, build.count, commit.slice( 0, 8 ) ].join( "_" ),
+		major: major,
+		minor: minor,
+		patch: patch,
+		major_version: major,
+		minor_version: [ major, minor ].join( "." ),
+		tag: tag,
 		slug: commit.slice( 0, 8 )
 	};
+}
+
+function filter( list ) {
+	if( !list ) {
+		return [];
+	} else {
+		return list.reduce( function( acc, x ) {
+			if( x ) {
+				acc.push( x );
+			}
+			return acc;
+		}, [] );
+	}
 }
 
 function getBranch( path ) {
@@ -60,7 +83,10 @@ function getCommitCount( path, version, sha, time ) {
 	return exec( command, path )
 		.then(
 			function( list ) {
-				return { version: version, count: _.filter( list.split( "\n" ) ).length + 1 };
+				return { 
+					version: version, 
+					count: filter( list.split( "\n" ) ).length + 1 
+				};
 			},
 			function( error ) {
 				return 0;
@@ -79,7 +105,10 @@ function getCommitsSinceVersion( path, filePath, version ) {
 			if ( firstCommitAndDate ) {
 				return getCommitCount( path, version, firstCommitAndDate[0], firstCommitAndDate[1] );
 			} else {
-				return { version: version, count: 0 };
+				return { 
+					version: version, 
+					count: 0 
+				};
 			}
 		} );
 }
@@ -104,7 +133,8 @@ function getFirstCommitForVersion( path, filePath, version ) {
 		.then(
 			function( list ) {
 				if ( list ) {
-					return _.last( _.filter( list.split( "\n" ) ) ).split( "|" );
+					var items = filter( list.split( "\n" ) );
+					return getLast( items ).split( "|" );
 				} else {
 					return 0;
 				}
@@ -112,6 +142,13 @@ function getFirstCommitForVersion( path, filePath, version ) {
 			function() {
 				return "none";
 			} );
+}
+
+function getLast( list ) {
+	if( !list || list.length === 0 ) {
+		return undefined;
+	}
+	return list[ list.length - 1 ];
 }
 
 function getOwner( path ) {
@@ -161,10 +198,54 @@ function getSlug( path ) {
 		} );
 }
 
-function readRepository( path ) {
+function getTags( branch, build, commit, owner, repo, major, minor, patch, format ) {
+	var specs = format.split( "," );
+	var tags = specs.reduce( function( acc, spec ) {
+		var segments = spec.split( "_" ).reduce( function( t, abbr ) {
+			switch ( abbr ) {
+				case "o":
+					t.push( owner );
+					break;
+				case "r":
+					t.push( repo );
+					break;
+				case "b":
+					t.push( branch );
+					break;
+				case "v":
+					t.push( build.version );
+					break;
+				case "c":
+					t.push( build.count );
+					break;
+				case "s":
+					t.push( commit.slice( 0, 8 ) );
+					break;
+				case "ma":
+					t.push( major );
+					break;
+				case "mi":
+					t.push( minor );
+					break;
+				case "p":
+					t.push( patch );
+					break;
+				case "miv":
+					t.push( [ major, minor ].join( "." ) );
+					break;
+			}
+			return t;
+		}, [] );
+		acc.push( segments.join( "_" ) );
+		return acc;
+	}, [] );
+	return tags.length === 1 ? tags[ 0 ] : tags;
+}
+
+function readRepository( path, format ) {
 	var fullPath = syspath.resolve( path );
 	if ( fs.existsSync( fullPath ) ) {
-		return when.try( createInfo, path, getBranch( path ), getBuildNumber( path ), getCommit( path ), getOwner( path ), getRepository( path ) );
+		return when.try( createInfo, path, getBranch( path ), getBuildNumber( path ), getCommit( path ), getOwner( path ), getRepository( path ), format );
 	} else {
 		return when.reject( new Error( "Cannot load repository information for invalid path \"" + fullPath + '"' ) );
 	}

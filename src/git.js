@@ -1,4 +1,3 @@
-var _ = require( "lodash" );
 var when = require( "when" );
 var exec = require( "./command" );
 var versions = require( "./version" );
@@ -83,9 +82,9 @@ function getCommitCount( path, version, sha, time ) {
 	return exec( command, path )
 		.then(
 			function( list ) {
-				return { 
-					version: version, 
-					count: filter( list.split( "\n" ) ).length + 1 
+				return {
+					version: version,
+					count: filter( list.split( "\n" ) ).length + 1
 				};
 			},
 			function( error ) {
@@ -105,9 +104,9 @@ function getCommitsSinceVersion( path, filePath, version ) {
 			if ( firstCommitAndDate ) {
 				return getCommitCount( path, version, firstCommitAndDate[0], firstCommitAndDate[1] );
 			} else {
-				return { 
-					version: version, 
-					count: 0 
+				return {
+					version: version,
+					count: 0
 				};
 			}
 		} );

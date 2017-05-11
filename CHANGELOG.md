@@ -1,6 +1,10 @@
 ## 0.2.x
 
-## 0.2.0
+### 0.2.1
+
+* Bugfix - remove errant require from git module 
+
+### 0.2.0
 
 * Adds support for custom tag format
 * Adds support for multiple tags

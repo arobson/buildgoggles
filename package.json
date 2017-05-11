@@ -7,7 +7,7 @@
     "buildgoggles": "./bin/buildgoggles"
   },
   "scripts": {
-    "test": "gulp test"
+    "test": "./pretest.sh && ./node_modules/mocha/bin/mocha spec/*.spec.js"
   },
   "repository": {
     "type": "git",
@@ -30,10 +30,9 @@
     "yargs": "^8.0.1"
   },
   "devDependencies": {
-    "biggulp": "^0.2.2",
+    "mocha": "^3.3.0",
     "chai": "^3.4.1",
     "chai-as-promised": "^5.2.0",
-    "gulp": "^3.9.0",
     "sinon": "^1.17.2",
     "sinon-as-promised": "^4.0.0",
     "sinon-chai": "^2.8.0"

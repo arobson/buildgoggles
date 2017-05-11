@@ -1,6 +1,10 @@
 ## build-goggles
 A way to capture git repository information for CI builds.
 
+[![Build Status][travis-image]][travis-url]
+[![Coverage Status][coveralls-image]][coveralls-url]
+[![NPM version][npm-image]][npm-url]
+
 ### Rationale
 Our dev team has the ability to deploy code from all forks and branches. That means we need to include information as part of any build artifact to uniquely identify where a particular build came from. build-goggles is a simple command line utilty that will get 6 pieces of information about a build and write it to a JSON file for use by other processes.
 
@@ -93,3 +97,7 @@ Resulting json (abbreviated):
 	"tag": [ "version_count_sha", "major.minor", "major" ]
 }
 ```
+
+[travis-url]: https://travis-ci.org/arobson/buildGoggles
+[coveralls-url]: https://coveralls.io/github/arobson/buildGoggles
+[npm-url]: https://www.npmjs.com/package/buildGoggles

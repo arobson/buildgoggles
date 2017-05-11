@@ -99,5 +99,8 @@ Resulting json (abbreviated):
 ```
 
 [travis-url]: https://travis-ci.org/arobson/buildGoggles
+[travis-image]: https://img.shields.io/travis/arobson/buildGoggles/master.svg
 [coveralls-url]: https://coveralls.io/github/arobson/buildGoggles
+[coveralls-image]: https://img.shields.io/coveralls/arobson/buildGoggles.svg
 [npm-url]: https://www.npmjs.com/package/buildGoggles
+[npm-image]: https://img.shields.io/npm/v/buildGoggles.svg

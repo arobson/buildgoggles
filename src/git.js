@@ -45,6 +45,8 @@ function filter( list ) {
 function getBranch( path ) {
 	if ( process.env.DRONE ) {
 		return when.resolve( process.env.DRONE_BRANCH );
+  } else if( process.env.TRAVIS ) {
+    return when.resolve( process.env.TRAVIS_BRANCH );
 	} else {
 		return exec( "git rev-parse --abbrev-ref HEAD", path )
 			.then(
@@ -162,15 +164,12 @@ function getOwner( path ) {
 			} )
 		.then( function( owner ) {
 			if ( owner === "anonymous" ) {
-				var slug = process.env.DRONE_REPO_SLUG;
-				var repo = process.env.DRONE_REPO;
-				if ( slug ) {
-					return slug.split( "/" )[ 1 ];
-				} else if ( repo ) {
-					return repo.split( "/" )[ 0 ];
-				} else {
-					return owner;
-				}
+        if( process.env.DRONE ) {
+          owner = process.env.DRONE_REPO_OWNER || process.env.DRONE_REPO_SLUG.split( "/" )[ 1 ];
+        } else if( process.env.TRAVIS ) {
+          owner = process.env.TRAVIS_REPO_SLUG.split( "/" )[ 0 ];
+        }
+				return owner;
 			} else {
 				return owner;
 			}
@@ -180,14 +179,20 @@ function getOwner( path ) {
 function getRepository( path ) {
 	var regex = /(https:\/\/|git@|git:\/\/)[^:\/]*[:\/][^\/]*\/(.*)/;
 	var dirname = syspath.basename( syspath.resolve( path ) );
-	return exec( "git remote show origin -n | grep 'Fetch URL: .*'", path )
-		.then(
-			function( line ) {
-				return regex.test( line ) ? regex.exec( line )[ 2 ] : dirname;
-			},
-			function() {
-				return dirname;
-			} );
+  if( process.env.DRONE ) {
+    return when.resolve( process.env.DRONE_REPO_NAME || process.env.DRONE_REPO_SLUG.split( "/" )[ 2 ] );
+  } else if( process.env.TRAVIS ) {
+    return when.resolve( repo = process.env.TRAVIS_REPO_SLUG.split( "/" )[ 1 ] );
+  } else {
+  	return exec( "git remote show origin -n | grep 'Fetch URL: .*'", path )
+  		.then(
+  			function( line ) {
+  				return regex.test( line ) ? regex.exec( line )[ 2 ] : dirname;
+  			},
+  			function() {
+          return dirname;
+  			} );
+  }
 }
 
 function getSlug( path ) {

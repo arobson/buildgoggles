@@ -4,6 +4,17 @@ var git = require( "../src/git.js" );
 var repoPath = path.resolve( "./spec/fauxgitaboudit" );
 
 describe( "Git", function() {
+  var owner;
+
+  before( function() {
+    owner = "anonymous";
+    repo = "fauxgitaboudit";
+    if( process.env.TRAVIS ) {
+      owner = process.env.TRAVIS_REPO_SLUG.split( "/" )[ 0 ];
+      repo = process.env.TRAVIS_REPO_SLUG.split( "/" )[ 1 ];
+    }
+  } );
+
 	describe( "when getting basic information with default tag", function() {
 		var repoInfo;
 
@@ -16,8 +27,8 @@ describe( "Git", function() {
 		} );
 
 		it( "should retrieve necessary repository data from environment", function() {
-			repoInfo.owner.should.equal( "anonymous" );
-			repoInfo.repository.should.equal( "fauxgitaboudit" );
+			repoInfo.owner.should.equal( owner );
+			repoInfo.repository.should.equal( repo );
 			repoInfo.branch.should.equal( "master" );
 			repoInfo.path.should.equal( repoPath );
 			repoInfo.build.should.equal( 5 );
@@ -27,7 +38,7 @@ describe( "Git", function() {
 			repoInfo.patch.should.equal( "1" );
 			repoInfo.major_version.should.equal( "0" );
 			repoInfo.minor_version.should.equal( "0.1" );
-			repoInfo.tag.should.equal( "anonymous_fauxgitaboudit_master_" + repoInfo.version + "_5_" + repoInfo.commit.slice( 0, 8 ) );
+			repoInfo.tag.should.equal( owner + "_" + repo + "_master_" + repoInfo.version + "_5_" + repoInfo.commit.slice( 0, 8 ) );
 		} );
 	} );
 
@@ -43,8 +54,8 @@ describe( "Git", function() {
 		} );
 
 		it( "should retrieve necessary repository data from environment", function() {
-			repoInfo.owner.should.equal( "anonymous" );
-			repoInfo.repository.should.equal( "fauxgitaboudit" );
+			repoInfo.owner.should.equal( owner );
+			repoInfo.repository.should.equal( repo );
 			repoInfo.branch.should.equal( "master" );
 			repoInfo.path.should.equal( repoPath );
 			repoInfo.build.should.equal( 5 );

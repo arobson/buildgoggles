@@ -4,6 +4,7 @@ A way to capture git repository information for CI builds.
 [![Build Status][travis-image]][travis-url]
 [![Coverage Status][coveralls-image]][coveralls-url]
 [![NPM version][npm-image]][npm-url]
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
 ### Rationale
 Our dev team has the ability to deploy code from all forks and branches. That means we need to include information as part of any build artifact to uniquely identify where a particular build came from. build-goggles is a simple command line utilty that will get 6 pieces of information about a build and write it to a JSON file for use by other processes.

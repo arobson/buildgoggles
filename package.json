@@ -8,7 +8,8 @@
   },
   "scripts": {
     "setup": "./pretest.sh",
-    "test": "./node_modules/mocha/bin/mocha spec/*.spec.js"
+    "test": "./node_modules/mocha/bin/mocha spec/*.spec.js",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -39,6 +40,7 @@
     "nyc": "^10.3.2",
     "sinon": "^1.17.2",
     "sinon-as-promised": "^4.0.0",
-    "sinon-chai": "^2.8.0"
+    "sinon-chai": "^2.8.0",
+    "standard-version": "^4.0.0"
   }
 }

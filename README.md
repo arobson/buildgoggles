@@ -18,7 +18,7 @@ To get a consistent build number without tracking builds in a centralized store,
 npm install buildgoggles -g
 ```
 
-### Use
+### CLI
 Running the command will either write `.buildinfo.json` or exit with a non-zero code.
 
 __If run from the repository__
@@ -97,6 +97,27 @@ Resulting json (abbreviated):
 {
 	"tag": [ "version_count_sha", "major.minor", "major" ]
 }
+```
+
+### API
+Using the API produces the same results and takes the same input and produces the same output.
+
+```js
+var goggles = require( "buildgoggles" );
+
+// all calls write to ./.buildinfo.json on success
+
+// defaults - repo at "./" and tag format "o_r_b_v_c_s"
+goggles.getInfo()
+  .then( function( info ) {} );
+
+// repo at "/custom/repo/path" and default tag format "o_r_b_v_c_s"
+goggles.getInfo( { repo: "/custom/repo/path" } )
+  .then( function( info ) {} );
+
+// default repo at "./" and default tag format "v_c_s,v,miv,ma"
+goggles.getInfo( { tags: [ "v_c_s", "v", "miv", "ma" ] } )
+  .then( function( info ) {} );
 ```
 
 [travis-url]: https://travis-ci.org/arobson/buildGoggles

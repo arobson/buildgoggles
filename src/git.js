@@ -202,9 +202,9 @@ function getSlug( path ) {
 		} );
 }
 
-function getTags( branch, build, commit, owner, repo, major, minor, patch, format ) {
-	var specs = format.split( "," );
-	var tags = specs.reduce( function( acc, spec ) {
+function getTags( branch, build, commit, owner, repo, major, minor, patch, specs ) {
+  var list = [].concat( specs );
+	var tags = list.reduce( function( acc, spec ) {
 		var segments = spec.split( "_" ).reduce( function( t, abbr ) {
 			switch ( abbr ) {
 				case "o":
@@ -246,10 +246,10 @@ function getTags( branch, build, commit, owner, repo, major, minor, patch, forma
 	return tags.length === 1 ? tags[ 0 ] : tags;
 }
 
-function readRepository( path, format ) {
+function readRepository( path, specs ) {
 	var fullPath = syspath.resolve( path );
 	if ( fs.existsSync( fullPath ) ) {
-		return when.try( createInfo, path, getBranch( path ), getBuildNumber( path ), getCommit( path ), getOwner( path ), getRepository( path ), format );
+		return when.try( createInfo, path, getBranch( path ), getBuildNumber( path ), getCommit( path ), getOwner( path ), getRepository( path ), specs );
 	} else {
 		return when.reject( new Error( "Cannot load repository information for invalid path \"" + fullPath + '"' ) );
 	}

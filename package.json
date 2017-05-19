@@ -9,6 +9,7 @@
   "scripts": {
     "setup": "./pretest.sh",
     "test": "./node_modules/mocha/bin/mocha spec/*.spec.js",
+    "coverage": "nyc npm test",
     "release": "standard-version"
   },
   "repository": {

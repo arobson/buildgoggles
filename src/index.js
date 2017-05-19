@@ -1,21 +1,31 @@
 var fs = require( "fs" );
 var path = require( "path" );
 var format = require( "util" ).format;
-var argv = require( "yargs" ).default( { tag: "o_r_b_v_c_s" } ).argv;
-var root = path.resolve( argv._.length > 0 ? argv._[ 0 ] : process.cwd() );
+var when = require( "when" );
 var git = require( "./git" );
 
-console.log( format( "Getting build information for repository at '%s'", root ) );
+function getInfo( options ) {
+  var args = options || {};
+  var repo = args.repo || process.cwd();
+  var tag = args.tags || [ "o_r_b_v_c_s" ];
+  console.log( format( "Getting build information for repository at '%s'", repo ) );
+  return git.repo( repo, tag )
+    .then( onInfo, onError );
+}
 
 function onInfo( info ) {
-	var filePath = path.join( root, ".buildinfo.json" );
-	fs.writeFile( filePath, JSON.stringify( info ), function( err ) {
-		if ( err ) {
-			console.error( "Failed to write to", filePath );
-		} else {
-			console.log( filePath, "written successfully" );
-		}
-	} );
+  return when.promise( function( resolve, reject ) {
+  	var filePath = path.join( info.path, ".buildinfo.json" );
+  	fs.writeFile( filePath, JSON.stringify( info ), function( err ) {
+  		if ( err ) {
+  			console.error( "Failed to write to", filePath );
+        reject( err );
+  		} else {
+  			console.log( filePath, "written successfully" );
+        resolve( info );
+  		}
+  	} );
+  } );
 }
 
 function onError( err ) {
@@ -23,5 +33,6 @@ function onError( err ) {
 	console.error( "Could not get build information due to", message );
 }
 
-git.repo( root, argv.tag )
-	.then( onInfo, onError );
+module.exports = {
+  getInfo: getInfo
+};

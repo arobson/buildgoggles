@@ -1,2 +1,7 @@
 #!/usr/bin/env node
-require( "../src/index.js" );
+var path = require( "path" );
+var argv = require( "yargs" ).default( { tag: "o_r_b_v_c_s" } ).argv;
+var root = path.resolve( argv._.length > 0 ? argv._[ 0 ] : process.cwd() );
+var goggles = require( "../src/index.js" );
+
+goggles.getInfo( { repo: root, tags: argv.tag.split( "," ) } );

@@ -46,7 +46,7 @@ describe( "Git", function() {
 		var repoInfo;
 
 		before( function( done ) {
-			git.repo( repoPath, "v_c_s,miv,ma" )
+			git.repo( repoPath, [ "v_c_s", "miv", "ma" ] )
 				.then( function( info ) {
 					repoInfo = info;
 					done();

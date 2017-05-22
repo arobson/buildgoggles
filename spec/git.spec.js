@@ -5,6 +5,8 @@ var repoPath = path.resolve( "./spec/fauxgitaboudit" );
 
 describe( "Git", function() {
   var owner;
+  var repo;
+  var branch;
 
   before( function() {
     owner = "anonymous";
@@ -12,6 +14,7 @@ describe( "Git", function() {
     if( process.env.TRAVIS ) {
       owner = process.env.TRAVIS_REPO_SLUG.split( "/" )[ 0 ];
       repo = process.env.TRAVIS_REPO_SLUG.split( "/" )[ 1 ];
+      branch = process.env.TRAVIS_BRANCH;
     }
   } );
 
@@ -29,7 +32,7 @@ describe( "Git", function() {
 		it( "should retrieve necessary repository data from environment", function() {
 			repoInfo.owner.should.equal( owner );
 			repoInfo.repository.should.equal( repo );
-			repoInfo.branch.should.equal( "master" );
+			repoInfo.branch.should.equal( branch  );
 			repoInfo.path.should.equal( repoPath );
 			repoInfo.build.should.equal( 5 );
 			repoInfo.commit.length.should.equal( 40 );
@@ -56,7 +59,7 @@ describe( "Git", function() {
 		it( "should retrieve necessary repository data from environment", function() {
 			repoInfo.owner.should.equal( owner );
 			repoInfo.repository.should.equal( repo );
-			repoInfo.branch.should.equal( "master" );
+			repoInfo.branch.should.equal( branch );
 			repoInfo.path.should.equal( repoPath );
 			repoInfo.build.should.equal( 5 );
 			repoInfo.commit.length.should.equal( 40 );

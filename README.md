@@ -1,4 +1,4 @@
-## build-goggles
+## buildgoggles
 A way to capture git repository information for CI builds.
 
 [![Build Status][travis-image]][travis-url]
@@ -7,10 +7,13 @@ A way to capture git repository information for CI builds.
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
 ### Rationale
-Our dev team has the ability to deploy code from all forks and branches. That means we need to include information as part of any build artifact to uniquely identify where a particular build came from. build-goggles is a simple command line utilty that will get 6 pieces of information about a build and write it to a JSON file for use by other processes.
+Our dev team has the ability to deploy code from all forks and branches. That means we need to include information as part of any build artifact to uniquely identify where a particular build came from. buildgoggles is a utility for collecting environment information from build environments (Travis/Drone environment variables and the Git repository) and placing them in a json file (or returning them via a promise).
 
 ### How build number is calculated
 To get a consistent build number without tracking builds in a centralized store, we count the number of commits that have occurred since the latest version was put in place.
+
+### How The LTS Check is determined
+The version is pulled from the process and then compared against a set of dates published by the Node team. Since it was subject to change, it might be out of date. Open an issue (or better yet a PR) if you believe this is incorrect.
 
 ### Installation
 
@@ -43,7 +46,14 @@ __sample output__
 	"version": "0.1.0",
 	"build": 1,
 	"slug": "a1b2c3d4",
-	"tag": "arobson_build-goggles_master_0.1.0_1_a1b2c3d4"
+	"tag": "arobson_build-goggles_master_0.1.0_1_a1b2c3d4",
+  "isLTS": true,
+  "commitMessage": "the commit message",
+  "ci": {
+    "inCI": "true",
+    "tagged": false,
+    "pullRequest": false
+  }
 }
 ```
 

@@ -5,13 +5,52 @@ var fs = require( "fs" );
 var syspath = require( "path" );
 var format = require( "util" ).format;
 
-function createInfo( path, branch, build, commit, owner, repo, format ) {
+function checkLTS() {
+  var version = /v([0-9]+)/.exec( process.version )[ 1 ];
+  var schedule = {
+    "6": new Date("2016-10-18"),
+    "8": new Date("2017-10-01"),
+    "10": new Date("2018-10-01"),
+  };
+  var startDate = schedule[ version ];
+  if( startDate ) {
+    var today = new Date();
+    return today >= startDate;
+  } else {
+    return false;
+  }
+}
+
+function checkForCIPR() {
+  if( process.env.TRAVIS ) {
+    return process.env.TRAVIS_PULL_REQUEST_BRANCH !== "";
+  } else if( process.env.DRONE ) {
+    return process.env.DRONE_BUILD_EVENT === "pull_request";
+  }
+}
+
+function checkForCITag() {
+  if( process.env.TRAVIS ) {
+    return process.env.TRAVIS_TAG !== "";
+  } else if( process.env.DRONE ) {
+    return process.env.DRONE_BUILD_EVENT === "tag";
+  }
+}
+
+function createInfo( path, branch, build, commit, owner, repo, format, message ) {
 	var verionParts = build.version ? build.version.split(".") : [ "0", "0", "0" ];
 	var major = verionParts[ 0 ];
 	var minor = verionParts.length > 1 ? verionParts[ 1 ] : "0";
 	var patch = verionParts.length > 2 ? verionParts[ 2 ] : "0";
 	var tag = getTags( branch, build, commit, owner, repo, major, minor, patch, format );
 	return {
+    ci: {
+      inCI: (process.env.DRONE || process.env.TRAVIS) ? true : false,
+      tagged: checkForCITag(),
+      pullRequest: checkForCIPR()
+    },
+    isLTS: checkLTS(),
+    commitMessage: message,
 		branch: branch,
 		version: build.version,
 		build: build.count,
@@ -77,6 +116,23 @@ function getCommit( path ) {
 				return "none";
 			}
 		);
+}
+
+function getHeadComment( path ) {
+  var command = "git log -n 1 --pretty='%B'";
+  return exec( command, path )
+    .then(
+      function( list ) {
+        return list.split("\n").reduce( function( acc, line ) {
+          if( line && line !== "" ) {
+            acc.push( line );
+          }
+          return acc;
+        }, [] ).join( " " );
+      },
+      function( err ) {
+        return "";
+      } );
 }
 
 function getCommitCount( path, version, sha, time ) {
@@ -249,23 +305,28 @@ function getTags( branch, build, commit, owner, repo, major, minor, patch, specs
 function readRepository( path, specs ) {
 	var fullPath = syspath.resolve( path );
 	if ( fs.existsSync( fullPath ) ) {
-		return when.try( createInfo, path, getBranch( path ), getBuildNumber( path ), getCommit( path ), getOwner( path ), getRepository( path ), specs );
+		return when.try( createInfo, path, getBranch( path ), getBuildNumber( path ), getCommit( path ), getOwner( path ), getRepository( path ), specs, getHeadComment( path ) );
 	} else {
 		return when.reject( new Error( "Cannot load repository information for invalid path \"" + fullPath + '"' ) );
 	}
 }
 
 module.exports = {
+  checkLTS: checkLTS,
+  checkForCIPR: checkForCIPR,
+  checkForCITag: checkForCITag,
 	getBranch: getBranch,
 	getBuildNumber: getBuildNumber,
-	getCommit: getCommit,
+  getCommit: getCommit,
 	getCommitCount: getCommitCount,
 	getCommitsSinceVersion: getCommitsSinceVersion,
 	getCommitsSinceCurrentVersion: getCommitsSinceCurrentVersion,
 	getCurrentVersion: getCurrentVersion,
 	getFirstCommitForVersion: getFirstCommitForVersion,
+  getHeadComment: getHeadComment,
 	getOwner: getOwner,
 	getRepository: getRepository,
 	getSlug: getSlug,
+  getTags: getTags,
 	repo: readRepository
 };

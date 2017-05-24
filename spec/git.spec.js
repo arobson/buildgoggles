@@ -12,7 +12,7 @@ describe( "Git", function() {
     owner = "anonymous";
     repo = "fauxgitaboudit";
     branch = "master";
-    if( process.env.TRAVIS ) {
+    if( process.env.TRAVIS && process.env.TRAVIS_TAG ) {
       owner = process.env.TRAVIS_REPO_SLUG.split( "/" )[ 0 ];
       repo = process.env.TRAVIS_REPO_SLUG.split( "/" )[ 1 ];
       branch = process.env.TRAVIS_BRANCH;

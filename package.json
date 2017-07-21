@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/arobson/buildgoggles#readme",
   "dependencies": {
-    "globulesce": "^0.1.5",
+    "globulesce": "1.0.0",
     "when": "^3.7.7",
     "yargs": "^8.0.1"
   },
@@ -42,6 +42,12 @@
     "sinon": "^1.17.2",
     "sinon-as-promised": "^4.0.0",
     "sinon-chai": "^2.8.0",
+    "standard": "^10.0.2",
     "standard-version": "^4.0.0"
+  },
+  "standard": {
+    "env": [
+      "mocha"
+    ]
   }
 }

@@ -60,6 +60,8 @@ __sample output__
 ### Tag Options
 You can change the format of the tag by providing a spec composed of segment abbreviations delimited by `_`s. You can even supply multiple tag specifications delimited by `,`s.
 
+ * lm - will conditionally add `latest` tag to master branch builds
+ * lt - will conditionally add `latest` tag to tagged builds
  * o - repository owner name
  * r - repository name
  * b - branch name

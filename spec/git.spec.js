@@ -38,11 +38,29 @@ describe('Git', function () {
 
   describe('when building tags from specifications', function () {
     it('should build correct tags according to specs', function () {
-      git.getTags('c', { version: '1.2.3', count: 'd' }, 'e', 'a', 'b', '1', '2', '3', [ 'o_r_b_c_s', 'v_miv_ma_mi_p' ])
+      git.getTags('c', { version: '1.2.3', count: 'd' }, 'e', 'a', 'b', '1', '2', '3', false, [ 'o_r_b_c_s', 'v_miv_ma_mi_p' ])
         .should.eql([
           'a_b_c_d_e',
           '1.2.3_1.2_1_2_3'
         ])
+    })
+
+    it('should add latest if lt is part of spec and tagged is true', function () {
+      git.getTags('c', { version: '1.2.3', count: 'd' }, 'e', 'a', 'b', '1', '2', '3', true, [ 'lt', 'o_r_b_c_s', 'v_miv_ma_mi_p' ])
+      .should.eql([
+        'latest',
+        'a_b_c_d_e',
+        '1.2.3_1.2_1_2_3'
+      ])
+    })
+
+    it('should add latest if lm is part of spec and branch is master', function () {
+      git.getTags('master', { version: '1.2.3', count: 'd' }, 'e', 'a', 'b', '1', '2', '3', true, [ 'lm', 'o_r_b_c_s', 'v_miv_ma_mi_p' ])
+      .should.eql([
+        'latest',
+        'a_b_master_d_e',
+        '1.2.3_1.2_1_2_3'
+      ])
     })
   })
 

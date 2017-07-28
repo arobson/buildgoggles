@@ -4,6 +4,7 @@ const versions = require('./version')
 const fs = require('fs')
 const syspath = require('path')
 const format = require('util').format
+const LATEST = 'latest'
 
 function checkLTS () {
   const version = /v([0-9]+)/.exec(process.version)[ 1 ]
@@ -42,11 +43,12 @@ function createInfo (path, branch, build, commit, owner, repo, format, message) 
   const major = verionParts[ 0 ]
   const minor = verionParts.length > 1 ? verionParts[ 1 ] : '0'
   const patch = verionParts.length > 2 ? verionParts[ 2 ] : '0'
-  const tag = getTags(branch, build, commit, owner, repo, major, minor, patch, format)
+  const tagged = checkForCITag()
+  const tag = getTags(branch, build, commit, owner, repo, major, minor, patch, tagged, format)
   return {
     ci: {
       inCI: !!((process.env.DRONE || process.env.TRAVIS)),
-      tagged: checkForCITag(),
+      tagged: tagged,
       pullRequest: checkForCIPR()
     },
     isLTS: checkLTS(),
@@ -257,7 +259,7 @@ function getSlug (path) {
     })
 }
 
-function getTags (branch, build, commit, owner, repo, major, minor, patch, specs) {
+function getTags (branch, build, commit, owner, repo, major, minor, patch, tagged, specs) {
   const list = [].concat(specs)
   const tags = list.reduce((acc, spec) => {
     const segments = spec.split('_').reduce((t, abbr) => {
@@ -291,6 +293,16 @@ function getTags (branch, build, commit, owner, repo, major, minor, patch, specs
           break
         case 'miv':
           t.push([ major, minor ].join('.'))
+          break
+        case 'lm':
+          if (branch === 'master') {
+            t.push(LATEST)
+          }
+          break
+        case 'lt':
+          if (tagged) {
+            t.push(LATEST)
+          }
           break
       }
       return t

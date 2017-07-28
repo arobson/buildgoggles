@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/arobson/buildgoggles/compare/v0.4.1...v0.5.0) (2017-07-28)
+
+
+### Features
+
+* add lt and lm flags to support adding conditional latest tags to builds ([eefb5ed](https://github.com/arobson/buildgoggles/commit/eefb5ed))
+
+
+
 <a name="0.4.1"></a>
 ## [0.4.1](https://github.com/arobson/buildgoggles/compare/v0.4.0...v0.4.1) (2017-07-21)
 

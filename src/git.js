@@ -210,6 +210,11 @@ function getLast (list) {
 }
 
 function getOwner (path) {
+  if (process.env.DRONE) {
+    return when.resolve(process.env.DRONE_REPO_OWNER || process.env.DRONE_REPO_SLUG.split('/')[ 1 ])
+  } else if (process.env.TRAVIS) {
+    return when.resolve(process.env.TRAVIS_REPO_SLUG.split('/')[ 0 ])
+  }
   const regex = /(https:\/\/|git@|git:\/\/)[^:/]*[:/]([^/]*).*/
   return exec("git remote show origin -n | grep 'Fetch URL: .*'", path)
     .then(
@@ -219,18 +224,6 @@ function getOwner (path) {
       () => {
         return 'anonymous'
       })
-    .then(owner => {
-      if (owner === 'anonymous') {
-        if (process.env.DRONE) {
-          owner = process.env.DRONE_REPO_OWNER || process.env.DRONE_REPO_SLUG.split('/')[ 1 ]
-        } else if (process.env.TRAVIS) {
-          owner = process.env.TRAVIS_REPO_SLUG.split('/')[ 0 ]
-        }
-        return owner
-      } else {
-        return owner
-      }
-    })
 }
 
 function getRepository (path) {
@@ -239,7 +232,7 @@ function getRepository (path) {
   if (process.env.DRONE) {
     return when.resolve(process.env.DRONE_REPO_NAME || process.env.DRONE_REPO_SLUG.split('/')[ 2 ])
   } else if (process.env.TRAVIS) {
-    return when.resolve(process.env.TRAVIS_REPO_SLUG.split('/')[ 1 ])
+    return when.resolve(process.env.TRAVIS_REPO_SLUG.split('/')[ 1 ].replace(/.git$/, ''))
   } else {
     return exec("git remote show origin -n | grep 'Fetch URL: .*'", path)
       .then(
@@ -249,6 +242,7 @@ function getRepository (path) {
         () => {
           return dirname
         })
+      .then(repo => repo.replace(/.git$/, ''))
   }
 }
 

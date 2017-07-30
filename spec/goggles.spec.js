@@ -8,7 +8,7 @@ describe('Goggles', function () {
     it('should use default repository path and tag format', function () {
       return goggles.getInfo()
         .then(function (info) {
-          info.repository.should.equal('buildGoggles')
+          info.repository.toLowerCase().should.equal('buildgoggles')
           info.path.should.equal(process.cwd())
           info.tag.should.equal([
             info.owner,

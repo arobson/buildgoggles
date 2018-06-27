@@ -229,6 +229,7 @@ describe('Git', function () {
       process.env.TRAVIS = true
       process.env.TRAVIS_BRANCH = 'testing'
       process.env.TRAVIS_REPO_SLUG = 'me/test'
+      process.env.TRAVIS_COMMIT = 'abcd1234'
       return git.repo(repoPath, 'o_r_b_v_c_s')
         .then(function (info) {
           repoInfo = info
@@ -241,13 +242,15 @@ describe('Git', function () {
       repoInfo.branch.should.equal('testing')
       repoInfo.path.should.equal(path.resolve(repoPath))
       repoInfo.build.should.equal(2)
-      repoInfo.commit.length.should.equal(40)
+      repoInfo.slug.should.eql('abcd1234')
+      repoInfo.commit.length.should.equal(8)
     })
 
     after(function () {
       delete process.env.TRAVIS
       delete process.env.TRAVIS_BRANCH
       delete process.env.TRAVIS_REPO_SLUG
+      delete process.env.TRAVIS_COMMIT
     })
   })
 })

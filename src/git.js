@@ -109,15 +109,19 @@ function getBuildNumber (path) {
 }
 
 function getCommit (path) {
-  return exec('git rev-parse HEAD', path)
-    .then(
-      commit => {
-        return commit.trim()
-      },
-      () => {
-        return 'none'
-      }
-    )
+  if (process.env.TRAVIS_COMMIT) {
+    return Promise.resolve(process.env.TRAVIS_COMMIT)
+  } else {
+    return exec('git rev-parse HEAD', path)
+      .then(
+        commit => {
+          return commit.trim()
+        },
+        () => {
+          return 'none'
+        }
+      )
+  }
 }
 
 function getHeadComment (path) {

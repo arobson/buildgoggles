@@ -1,6 +1,6 @@
 {
   "name": "buildgoggles",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A simple CLI for gathering key info around a git repo and writing it to a json file",
   "main": "src/index.js",
   "bin": {

@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.2"></a>
+## [0.5.2](https://github.com/arobson/buildgoggles/compare/v0.5.1...v0.5.2) (2018-06-27)
+
+
+### Bug Fixes
+
+* grab the commit SHA that Travis is using the code from since they're rolling the log backwards and causing git CLI to see an older commit despite having the later source ([a8e1f91](https://github.com/arobson/buildgoggles/commit/a8e1f91))
+
+
+
 <a name="0.5.1"></a>
 ## [0.5.1](https://github.com/arobson/buildgoggles/compare/v0.5.0...v0.5.1) (2017-07-30)
 

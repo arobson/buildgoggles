@@ -24,11 +24,13 @@ describe('Git', function () {
       var version = /v([0-9]+)/.exec(process.version)[ 1 ]
       var today = new Date()
       var lts = git.checkLTS()
-      if (version === '6' && today < new Date('10-01-2017')) {
+      if (version === '6' && today < new Date('2017-01-10')) {
         lts.should.equal(true)
-      } else if (version === '8' && today >= new Date('10-01-2017') && today < new Date('10-01-2018')) {
+      } else if (version === '8' && today >= new Date('2017-01-10') && today < new Date('2018-01-10')) {
         lts.should.equal(true)
-      } else if (version === '10' && today >= new Date('10-01-2018')) {
+      } else if (version === '10' && today >= new Date('2018-01-10') && today < new Date('2019-01-21')) {
+        lts.should.equal(true)
+      } else if (version === '12' && today >= new Date('2019-01-21')) {
         lts.should.equal(true)
       } else {
         lts.should.equal(false)

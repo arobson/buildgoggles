@@ -1,6 +1,6 @@
 {
-  "name": "buildgoggles",
-  "version": "0.5.2",
+  "name": "@npm-wharf/buildgoggles",
+  "version": "1.0.0",
   "description": "A simple CLI for gathering key info around a git repo and writing it to a json file",
   "main": "src/index.js",
   "bin": {
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/arobson/buildgoggles.git"
+    "url": "git://github.com/npm-wharf/buildgoggles.git"
   },
   "keywords": [
     "build",
@@ -24,9 +24,9 @@
   "author": "Alex Robson",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/arobson/buildgoggles/issues"
+    "url": "https://github.com/npm-wharf/buildgoggles/issues"
   },
-  "homepage": "https://github.com/arobson/buildgoggles#readme",
+  "homepage": "https://github.com/npm-wharf/buildgoggles#readme",
   "dependencies": {
     "globulesce": "1.0.0",
     "when": "^3.7.7",

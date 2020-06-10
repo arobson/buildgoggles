@@ -8,15 +8,17 @@ const LATEST = 'latest'
 
 function checkLTS () {
   const version = /v([0-9]+)/.exec(process.version)[ 1 ]
+  const today = new Date()
+  const tomorrow = new Date(today.getTime() + 86400000)
   const schedule = {
-    '6': new Date('2016-10-18'),
-    '8': new Date('2017-10-01'),
-    '10': new Date('2018-10-01')
+    '6': [new Date('2016-10-18'), new Date('2017-10-31')],
+    '8': [new Date('2017-10-31'), new Date('2018-10-30')],
+    '10': [new Date('2018-10-30'), new Date('2019-10-21')],
+    '12': [new Date('2019-10-21'), tomorrow]
   }
-  const startDate = schedule[ version ]
-  if (startDate) {
-    const today = new Date()
-    return today >= startDate
+  const dateRange = schedule[version]
+  if (dateRange) {
+    return today >= dateRange[0] && today < dateRange[1]
   } else {
     return false
   }
@@ -190,7 +192,7 @@ function getCurrentVersion (path, filePath) {
 
 function getFirstCommitForVersion (path, filePath, version) {
   const regex = versions.getTemplate(filePath, version)
-  const command = format("git log -S'%s' --pickaxe-regex --pretty='%H|%ct' %s", regex, filePath)
+  const command = format("git log -S'%s' --pickaxe-regex --pretty='%s' %s", regex, '%H|%ct', filePath)
   return exec(command, path)
     .then(
       list => {

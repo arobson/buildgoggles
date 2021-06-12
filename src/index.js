@@ -1,7 +1,6 @@
 const fs = require('fs')
 const path = require('path')
 const format = require('util').format
-const when = require('when')
 const git = require('./git')
 
 function getInfo (options) {
@@ -14,7 +13,7 @@ function getInfo (options) {
 }
 
 function onInfo (info) {
-  return when.promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const filePath = path.join(info.path, '.buildinfo.json')
     fs.writeFile(filePath, JSON.stringify(info), err => {
       if (err) {

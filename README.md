@@ -1,8 +1,6 @@
 ## buildgoggles
 A way to capture git repository information for CI builds.
 
-[![Build Status][travis-image]][travis-url]
-[![Coverage Status][coveralls-image]][coveralls-url]
 [![npm version][npm-image]][npm-url]
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
@@ -132,9 +130,5 @@ goggles.getInfo({ tags: [ 'v_c_s', 'v', 'miv', 'ma' ] })
   .then(info > {})
 ```
 
-[travis-url]: https://travis-ci.org/arobson/buildGoggles
-[travis-image]: https://travis-ci.org/arobson/buildgoggles.svg?branch=master
-[coveralls-url]: https://coveralls.io/github/arobson/buildgoggles?branch=master
-[coveralls-image]: https://coveralls.io/repos/github/arobson/buildgoggles/badge.svg?branch=master
 [npm-url]: https://www.npmjs.com/package/buildGoggles
 [npm-image]: https://img.shields.io/npm/v/buildGoggles.svg

@@ -3,7 +3,6 @@ const exec = require('./command')
 const versions = require('./version')
 const fs = require('fs')
 const syspath = require('path')
-const format = require('util').format
 const LATEST = 'latest'
 
 function checkLTS () {
@@ -85,9 +84,9 @@ function filter (list) {
 
 function getBranch (path) {
   if (process.env.DRONE) {
-    return when.resolve(process.env.DRONE_BRANCH)
+    return Promise.resolve(process.env.DRONE_BRANCH)
   } else if (process.env.TRAVIS) {
-    return when.resolve(process.env.TRAVIS_BRANCH)
+    return Promise.resolve(process.env.TRAVIS_BRANCH)
   } else {
     return exec('git rev-parse --abbrev-ref HEAD', path)
       .then(
@@ -142,7 +141,7 @@ function getHeadComment (path) {
 }
 
 function getCommitCount (path, version, sha, time) {
-  const command = format('git log --since=%s %s..HEAD --pretty=%H', time, sha)
+  const command = `git log --since=${time} ${sha}..HEAD --pretty=%H`
   return exec(command, path)
     .then(
       list => {
@@ -190,7 +189,7 @@ function getCurrentVersion (path, filePath) {
 
 function getFirstCommitForVersion (path, filePath, version) {
   const regex = versions.getTemplate(filePath, version)
-  const command = format("git log -S'%s' --pickaxe-regex --pretty='%H|%ct' %s", regex, filePath)
+  const command = `git log -S'${regex}' --pickaxe-regex --pretty='%H|%ct' ${filePath}`
   return exec(command, path)
     .then(
       list => {
@@ -215,9 +214,9 @@ function getLast (list) {
 
 function getOwner (path) {
   if (process.env.DRONE) {
-    return when.resolve(process.env.DRONE_REPO_OWNER || process.env.DRONE_REPO_SLUG.split('/')[ 1 ])
+    return Promise.resolve(process.env.DRONE_REPO_OWNER || process.env.DRONE_REPO_SLUG.split('/')[ 1 ])
   } else if (process.env.TRAVIS) {
-    return when.resolve(process.env.TRAVIS_REPO_SLUG.split('/')[ 0 ])
+    return Promise.resolve(process.env.TRAVIS_REPO_SLUG.split('/')[ 0 ])
   }
   const regex = /(https:\/\/|git@|git:\/\/)[^:/]*[:/]([^/]*).*/
   return exec("git remote show origin -n | grep 'Fetch URL: .*'", path)
@@ -234,9 +233,9 @@ function getRepository (path) {
   const regex = /(https:\/\/|git@|git:\/\/)[^:/]*[:/][^/]*\/(.*)/
   const dirname = syspath.basename(syspath.resolve(path))
   if (process.env.DRONE) {
-    return when.resolve(process.env.DRONE_REPO_NAME || process.env.DRONE_REPO_SLUG.split('/')[ 2 ])
+    return Promise.resolve(process.env.DRONE_REPO_NAME || process.env.DRONE_REPO_SLUG.split('/')[ 2 ])
   } else if (process.env.TRAVIS) {
-    return when.resolve(process.env.TRAVIS_REPO_SLUG.split('/')[ 1 ].replace(/.git$/, ''))
+    return Promise.resolve(process.env.TRAVIS_REPO_SLUG.split('/')[ 1 ].replace(/.git$/, ''))
   } else {
     return exec("git remote show origin -n | grep 'Fetch URL: .*'", path)
       .then(
@@ -316,7 +315,7 @@ function readRepository (path, specs) {
   if (fs.existsSync(fullPath)) {
     return when.try(createInfo, path, getBranch(path), getBuildNumber(path), getCommit(path), getOwner(path), getRepository(path), specs, getHeadComment(path))
   } else {
-    return when.reject(new Error('Cannot load repository information for invalid path "' + fullPath + '"'))
+    return Promise.reject(new Error('Cannot load repository information for invalid path "' + fullPath + '"'))
   }
 }
 
